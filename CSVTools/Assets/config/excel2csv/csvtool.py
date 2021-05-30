@@ -4,9 +4,9 @@ import sys
 import pandas
 
 
-def excel_to_csv_all(config_path: str):
-    xlsx_path = config_path + "/config/xlsx"
-    csv_path = config_path + "/config/csv"
+def excel_to_csv_all(data_path: str):
+    xlsx_path = data_path + "/config/xlsx"
+    csv_path = data_path + "/config/csv"
     xlsx_list = []
     file_list = os.listdir(xlsx_path)
     for filename in file_list:
@@ -20,9 +20,9 @@ def excel_to_csv_all(config_path: str):
     print("Complete")
 
 
-def excel_to_csv(config_path: str, xlsx_name: str):
-    xlsx_path = config_path + "/config/xlsx"
-    csv_path = config_path + "/config/csv"
+def excel_to_csv(data_path: str, xlsx_name: str):
+    xlsx_path = data_path + "/config/xlsx"
+    csv_path = data_path + "/config/csv"
     csv_name = xlsx_name.split("-")[0] + ".csv"
     xlsx_file = pandas.read_excel(f"{xlsx_path}/{xlsx_name}")
     xlsx_file.to_csv(f"{csv_path}/{csv_name}", encoding="GB2312")
