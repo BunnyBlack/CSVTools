@@ -1,7 +1,11 @@
 ﻿using UnityEditor;
 using UnityEngine;
 using System.Diagnostics;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
+using LitJson;
 using Debug = UnityEngine.Debug;
+using File = System.IO.File;
 
 namespace Editor
 {
@@ -10,7 +14,7 @@ namespace Editor
         private static string _pythonPath = "";
         private const string CsvToolName = @"csvtool.py";
 
-        [MenuItem("打表工具/打印Python位置")]
+        [MenuItem("打表工具/设置Python位置/自动搜索Python位置")]
         public static void WherePython()
         {
             DoWherePython();
@@ -28,7 +32,6 @@ namespace Editor
 
         }
 
-        
 
         private static void DoWherePython()
         {
@@ -47,7 +50,7 @@ namespace Editor
                     // 输出错误
                     RedirectStandardError = true,
                     // 不显示程序窗口
-                    CreateNoWindow = false
+                    CreateNoWindow = true
                 }
             };
             //启动程序
@@ -56,13 +59,13 @@ namespace Editor
             var outputInfo = p.StandardOutput.ReadToEnd();
             p.WaitForExit();
             p.Close();
-            
+
             // 按换行符分开
             var outputStrList = outputInfo.Split('\n');
             // 找到结尾是 python.exe 的字符串作为 python 的路径
             foreach (var outputStr in outputStrList)
             {
-                
+
                 if (!outputStr.Trim().EndsWith("python.exe"))
                     continue;
 
@@ -73,7 +76,7 @@ namespace Editor
             }
             if (string.IsNullOrEmpty(_pythonPath))
             {
-                Debug.LogError("未找到Python路径！");
+                Debug.LogError("未找到Python路径!");
             }
         }
 
@@ -83,7 +86,7 @@ namespace Editor
             {
                 DoWherePython();
             }
-            
+
             var cmdCommand =
                 $"\"{Application.dataPath}/config/excel2csv/{CsvToolName}\" \"excel_to_csv_all('{Application.dataPath}')\"";
             var p = new Process
@@ -113,6 +116,7 @@ namespace Editor
 
             Debug.Log(outputInfo);
             Debug.Log("所有Excel转CSV");
+            AssetDatabase.Refresh();
         }
     }
 }
