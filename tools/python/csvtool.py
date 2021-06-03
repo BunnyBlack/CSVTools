@@ -24,7 +24,10 @@ def excel_to_csv(data_path: str, xlsx_name: str):
     xlsx_path = data_path + "/config/xlsx"
     csv_path = data_path + "/config/csv"
     csv_name = xlsx_name.split("-")[0] + ".csv"
-    xlsx_file = pandas.read_excel(f"{xlsx_path}/{xlsx_name}")
+    xlsx_name = f"{xlsx_path}/{xlsx_name}"
+    if not xlsx_name.endswith(".xlsx"):
+        xlsx_name = xlsx_name + ".xlsx"
+    xlsx_file = pandas.read_excel(xlsx_name)
     xlsx_file.to_csv(f"{csv_path}/{csv_name}", encoding="GB2312")
     print(f"Generate: {csv_path}/{csv_name}")
 
